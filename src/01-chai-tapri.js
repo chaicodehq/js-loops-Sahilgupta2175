@@ -27,5 +27,18 @@
  *   // => { totalChai: 0, totalRevenue: 0 }
  */
 export function chaiTapriRevenue(customers) {
-  // Your code here
+  if (
+    typeof customers !== "number" ||
+    !Number.isInteger(customers) ||
+    customers <= 0
+  ) {
+    return { totalChai: 0, totalRevenue: 0 };
+  }
+
+  let adrakChaiCustomer = parseInt(customers / 3);
+  let cuttingChaiCustomer = customers - adrakChaiCustomer;
+
+  let totalRevenue = adrakChaiCustomer * 15 + cuttingChaiCustomer * 10;
+
+  return { totalChai: customers, totalRevenue };
 }
