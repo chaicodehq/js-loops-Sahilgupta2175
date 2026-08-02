@@ -36,47 +36,51 @@
  *   rangoli(3) // => ["  *", " * *", "* * *", " * *", "  *"]
  */
 export function rangoli(n) {
-  if (typeof n !== "number" || !Number.isInteger(n) || n <= 0) {
+  if (typeof (n) !== "number" || n <= 0 || !Number.isInteger(n)) {
     return [];
   }
 
-  const stars = [];
+  let result = [];
 
   for (let i = 1; i <= n; i++) {
-    let row = "";
-
-    for (let j = 1; j <= n - i; j++) {
-      row += " ";
+    let rowString = "";
+    
+    // space
+    for (let j = 1; j <= (n - i); j++) {
+      rowString += " ";
     }
 
+    // star
     for (let j = 1; j <= i; j++) {
-      row += "*";
+      rowString += "*";
 
-      if (j < i) {
-        row += " ";
+      if (j !== i) {
+        rowString += " ";
       }
     }
 
-    stars.push(row);
+    result.push(rowString);
   }
 
-  for (let i = n - 1; i >= 1; i--) {
-    let row = "";
+  for (let i = (n - 1); i >= 1; i--) {
+    let rowString = "";
 
+    // space
     for (let j = 1; j <= n - i; j++) {
-      row += " ";
+      rowString += " ";
     }
 
+    // star
     for (let j = 1; j <= i; j++) {
-      row += "*";
+      rowString += "*";
 
-      if (j < i) {
-        row += " ";
+      if (j !== i) {
+        rowString += " ";
       }
     }
 
-    stars.push(row);
+    result.push(rowString);
   }
 
-  return stars;
+  return result;
 }

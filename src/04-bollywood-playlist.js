@@ -40,18 +40,23 @@ export function buildPlaylist(songs, maxDuration) {
 
   let count = 0;
   let totalDuration = 0;
+  let idx = 0;
 
-  for (let i = 0; i < songs.length; i++) {
-    let songDuration = songs[i];
+  while (idx < songs.length) {
+    let song = songs[idx];
 
-    if (typeof (songDuration) === "number" && songDuration > 0) {
-      if ((totalDuration + songDuration) > maxDuration) {
-        break;
-      }
-
-      totalDuration += songDuration;
-      count++;
+    if (typeof (song) !== "number" || !Number.isFinite(song) || song <= 0) {
+      idx++;
+      continue;
     }
+
+    if ((totalDuration + song) > maxDuration) {
+      break;
+    }
+
+    totalDuration += song;
+    count++;
+    idx++;
   }
 
   return { count, totalDuration };

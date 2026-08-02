@@ -38,36 +38,32 @@
  *   // => { selected: [{ color: "golden", length: 5, cost: 250 }], totalLength: 5, totalCost: 250 }
  */
 export function diwaliLightsPlan(lightStrings, budget) {
-  if (!Array.isArray(lightStrings) || typeof(budget) !== "number" || budget <= 0) {
+  if (!Array.isArray(lightStrings) || lightStrings.length === 0 || typeof (budget) !== "number" || budget <= 0) {
     return { selected: [], totalLength: 0, totalCost: 0 };
   }
+
+  const rates = {
+    golden: 50,
+    multicolor: 40,
+    white: 30,
+    other: 35
+  };
 
   let selected = [];
   let totalLength = 0;
   let totalCost = 0;
 
   for (const light of lightStrings) {
-    let cost = 0;
-
-    if (light.color === "golden") {
-      cost = light.length * 50;
-    } else if (light.color === "multicolor") {
-      cost = light.length * 40;
-    } else if (light.color === "white") {
-      cost = light.length * 30;
-    } else {
-      cost = light.length * 35;
-    }
-
-    selected.push({ color: light.color, length: light.length, cost });
-    totalCost += cost;
+    let cost = light.length * (rates.hasOwnProperty(light.color) ? rates[light.color] : rates.other);
+    selected.push({ ...light, cost });
     totalLength += light.length;
+    totalCost += cost;
   }
 
-  while (totalCost > budget && selected.length > 0) {
-    const remove = selected.pop();
-    totalCost -= remove.cost;
-    totalLength -= remove.length;
+  while (totalCost > budget) {
+    let removeItem = selected.pop();
+    totalLength -= removeItem.length;
+    totalCost -= removeItem.cost;
   }
 
   return { selected, totalLength, totalCost };

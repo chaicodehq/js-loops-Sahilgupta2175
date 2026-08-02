@@ -42,42 +42,36 @@
  *   // => { months: -1, totalPaid: -1, totalInterest: -1 }
  */
 export function calculateEMI(principal, monthlyRate, emi) {
-  if (
-    typeof principal !== "number" ||
-    principal <= 0 ||
-    typeof monthlyRate !== "number" ||
-    monthlyRate <= 0 ||
-    typeof emi !== "number" ||
-    emi <= 0
-  ) {
+  if (typeof (principal) !== "number" || principal <= 0 || typeof (monthlyRate) !== "number" || monthlyRate <= 0 || typeof (emi) !== "number" || emi <= 0) {
     return { months: -1, totalPaid: -1, totalInterest: -1 };
   }
 
-  if (emi <= principal * monthlyRate) {
-    return { months: -1, totalPaid: -1, totalInterest: -1 };
-  }
-
+  let remaining = principal;
   let months = 0;
   let totalPaid = 0;
   let totalInterest = 0;
-  let remainingEmi = principal;
 
-  while (remainingEmi > 0) {
-    let interest = remainingEmi * monthlyRate;
-    remainingEmi += interest;
-    
-    if (emi < remainingEmi) {
-      remainingEmi -= emi;
-      totalPaid += emi;
+  let firstMonthInterest = remaining * monthlyRate;
+
+  if (emi <= firstMonthInterest) {
+    return { months: -1, totalPaid: -1, totalInterest: -1 };
+  }
+  
+  while (remaining > 0) {
+    let interest = remaining * monthlyRate;
+    totalInterest += interest;
+    remaining += interest;
+
+    if (remaining <= emi) {
+      totalPaid += remaining;
+      remaining = 0;
     } else {
-      totalPaid += remainingEmi;
-      remainingEmi = 0;
+      remaining -= emi;
+      totalPaid += emi;
     }
 
     months++;
   }
 
-  totalInterest = parseFloat((totalPaid - principal).toFixed(2));
-
-  return { months, totalPaid, totalInterest };
+  return { months, totalPaid: Math.round(totalPaid * 100) / 100, totalInterest: Math.round(totalInterest * 100) / 100};
 }

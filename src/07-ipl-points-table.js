@@ -41,7 +41,7 @@ export function iplPointsTable(matches) {
     return [];
   }
 
-  const table = {};
+  let table = {};
 
   for (let i = 0; i < matches.length; i++) {
     const { team1, team2, result, winner } = matches[i];
@@ -74,20 +74,23 @@ export function iplPointsTable(matches) {
     table[team2].played++;
 
     if (result === "win") {
-      const loser = winner === team1 ? team2 : team1;
-
       table[winner].won++;
       table[winner].points += 2;
-      table[loser].lost++;
+
+      const looser = winner === team1 ? team2 : team1;
+
+      table[looser].lost++;
     } else if (result === "tie") {
       table[team1].tied++;
-      table[team1].points++;
       table[team2].tied++;
+
+      table[team1].points++;
       table[team2].points++;
     } else if (result === "no_result") {
       table[team1].noResult++;
-      table[team1].points++;
       table[team2].noResult++;
+
+      table[team1].points++;
       table[team2].points++;
     }
   }

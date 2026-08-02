@@ -40,23 +40,26 @@ export function biryaniBatchProcessor(orders) {
 
   let totalBatches = 0;
   let totalPlates = 0;
-  let ordersProcessed = 0
+  let ordersProcessed = 0;
+  let idx = 0;
 
-  orders.forEach((order) => {
-    if (typeof(order) !== "number" || !Number.isInteger(order) ||order <= 0) {
-      return;
+  do {
+    let orderValue = orders[idx];
+
+    if (typeof (orderValue) === "number" && orderValue > 0 && Number.isInteger(orderValue)) {
+      let remaining = orderValue;
+
+      do {
+        remaining -= 5;
+        totalBatches++;
+      } while (remaining > 0);
+
+      totalPlates += orderValue;
+      ordersProcessed++;
     }
-
-    ordersProcessed++;
-    totalPlates += order;
     
-    let remaining = order;
-
-    do {
-      totalBatches++;
-      remaining -= 5;
-    } while (remaining > 0);
-  });
+    idx++;
+  } while (idx < orders.length);
 
   return { totalBatches, totalPlates, ordersProcessed };
 }

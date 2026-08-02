@@ -35,35 +35,30 @@ export function cricketScoreboard(balls) {
     return { totalRuns: 0, totalBalls: 0, wickets: 0, fours: 0, sixes: 0 };
   }
 
-  let totalRuns = 0;
-  let totalBalls = 0;
-  let wickets = 0;
-  let fours = 0;
-  let sixes = 0;
+  const outcomes = {
+    totalRuns: 0,
+    totalBalls: 0,
+    wickets: 0,
+    fours: 0,
+    sixes: 0
+  };
 
-  for (let i = 0; i < balls.length; i++) {
-    let ballOutcome = balls[i];
-
-    totalBalls++;
-
-    if (ballOutcome === -1) {
-      wickets++;
-
-      if (wickets === 10) {
-        break;
-      }
-    } else if (ballOutcome === 4) {
-      fours++;
-      totalRuns += 4;
-    } else if (ballOutcome === 6) {
-      sixes++;
-      totalRuns += 6;
-    } else {
-      if (ballOutcome >= 0) {
-        totalRuns += ballOutcome;
-      }
+  balls.forEach((ball) => {
+    if (outcomes.wickets === 10) {
+      return outcomes; 
     }
-  }
 
-  return { totalRuns, totalBalls, wickets, fours, sixes };
+    if (ball === -1) {
+      outcomes.wickets++;
+    } else if (ball === 4) {
+      outcomes.fours++;
+    } else if (ball === 6) {
+      outcomes.sixes++;
+    }
+
+    outcomes.totalBalls++;
+    outcomes.totalRuns += (ball === -1) ? 0 : ball;
+  });
+
+  return outcomes;
 }
